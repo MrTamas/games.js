@@ -1,14 +1,56 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
+body {
+    animation: gradientBG 15s ease infinite;
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    /* https://codepen.io/P1N2O/pen/pyBNzX */
+    background-size: 400% 400%;
+    color: ghostwhite;
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+    padding: 30px 0;
+}
+
+button {
+    margin: 0 auto;
+}
+
+form{
+    margin: 120px 0 0;
+}
+
 #container {
-    background: #aaaaaa;
-    height: 300px;
+    margin: 0 auto;
 }
 
-#containerdiv {
-
-}
-
-.cell {
+#guess_result > div{
+    display: inline-block;
     background: #ffffff;
-    height: 50px;
+    box-sizing: border-box;
+    height: 5px;
+    width: 1%;
 }
 
+#main {
+    margin: 0 auto;
+}
+
+#feedback {
+
+}
+
+h1 {
+    text-align: center;
+}
+
+input#guess {
+    width: 100%;
+}
+
+@media only screen and (min-width: 600px) {
+    #container {
+        width: 450px;
+    }
+    #main {
+        width: 600px;
+    }
+}

@@ -1,15 +1,19 @@
-addEventListener('load', function(e) {
-    document.querySelector('#test').innerHTML = 'For';
-});
+let goal = Math.floor(Math.random() * 100); // generate random number
+let remaining = 10; // set counter
+/*
+document.getElementById('goal').textContent = String(goal);
+*/
+const guessResult = document.querySelector('#guess_result');
+const feedback = document.querySelector('#feedback');
 
-let goal = Math.floor(Math.random()*100); // generate random number
-
-/* temp: add goal to page
-let goal_container = document.createElement('div');
-goal_container.textContent = String(goal);
-goal_container.id = 'goal_container'
-document.getElementsByTagName('body')[0].appendChild(goal_container);
- */
+let i;
+for (i=0; i < 100; i++) {
+    let newNumberBlock = document.createElement('div');
+    newNumberBlock.className = 'number_block';
+    newNumberBlock.id = 'c' + String(i+1);
+    guessResult.appendChild(newNumberBlock);
+    // newNumberBlock.textContent = String(i+1);
+}
 
 /**
  * checks whether number of divs is divisible by three
@@ -17,7 +21,45 @@ document.getElementsByTagName('body')[0].appendChild(goal_container);
  */
 function FullRow() {
     let cells = document.getElementsByClassName('cell');
-    return (cells.length%3 === 0);
+    return (cells.length % 3 === 0);
+}
+
+/**
+ * finds returns the cell by its id
+ * @param i
+ * @returns {HTMLElement}
+ */
+function findCell(i) {
+    return document.getElementById('c' + String(i))
+}
+
+function check(goal, guess) {
+    let message;
+    remaining -= 1; // decrease remaining turns
+    if (goal > Number(guess)) {
+        message = 'Too low! You still have ' + String(remaining) + ' tries, though.';
+    } else if (goal < Number(guess)) {
+        message = 'Too high! You still have ' + String(remaining) + ' tries, though.';
+    } else {
+        message = 'Well done!';
+    }
+    feedback.textContent = message;
+    return goal === Number(guess);
+}
+
+function remove() {
+    document.getElementById('guess').value = '';
+    document.getElementById('container').innerHTML = '';
+    document.getElementById('goal_container').textContent = '';
+    let cells = document.getElementsByClassName('number_block');
+    for (let i = 0; i < cells.length; i++) {
+        cells[i].style.backgroundColor = '#ffffff';
+    }
+}
+
+function gameOver() {
+    feedback.textContent = 'Sorry, you\'ve used up your turns. The solution was ' + goal + '.';
+    remove();
 }
 
 /**
@@ -25,9 +67,9 @@ function FullRow() {
  * @param guess
  */
 function recordGuess(guess) {
-
+    // add element
     let newDiv = document.createElement('div');
-    newDiv.class = 'cell';
+    newDiv.className = 'cell';
     newDiv.classList.add('col-sm-4');
     newDiv.textContent = guess;
     let row;
@@ -37,36 +79,23 @@ function recordGuess(guess) {
         document.getElementById('container').appendChild(row);
     }
     let rows = document.getElementsByClassName('row');
-    row = rows[rows.length-1];
+    row = rows[rows.length - 1];
     row.appendChild(newDiv);
-}
 
-function check(goal, guess) {
-    if (goal > Number(guess)) {
-        alert('Too low!');
-    }
-    else if (goal < guess) {
-        alert('Too high!');
-    }
-    else {
-        alert('Well done!');
-    }
-    return goal === Number(guess);
-}
+    findCell(guess).style.background = 'none'; // mark on number line
 
-function remove() {
-    document.getElementById('guess').value = '';
-    document.getElementById('container').innerHTML = '';
-    document.getElementById('goal_container').textContent = '';
+    if (remaining === 0) {
+        gameOver();
+    }
 }
 
 document.getElementById('submit').addEventListener('click', () => {
     let guess = document.getElementById('guess').value;
-
-    if (check(goal, guess)) {
-        remove();
-    }
-    else {
-        recordGuess(guess);
+    if (guess !== '') {
+        if (check(goal, guess)) {
+            remove();
+        } else {
+            recordGuess(guess);
+        }
     }
 });
